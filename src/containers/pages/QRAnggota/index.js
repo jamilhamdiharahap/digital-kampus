@@ -28,10 +28,10 @@ class QRAnggota extends Component {
 
     AsyncStorage.getItem('mahasiswa', (error, result) => {
       if (result) {
-        let data = JSON.stringify(result)
+        let data = JSON.parse(result)
         this.setState({
           nim: data.nim,
-          nama:data.fullname
+          nama:data.nama_mhs
         });
       } else {
         alert('NIM tidak ditemukan, silahkan untuk Login ulang');
@@ -44,20 +44,20 @@ class QRAnggota extends Component {
   }
 
   render() {
-    let url = this.state.nim + ',' + this.state.nama;
-
     return (
       <View style={styles.container}>
         <Header />
         <Text style={styles.titleTop}>Yuk isi daftar kunjungan !</Text>
         <View style={styles.qr}>
-          <QRCode
-            value={url}
-            quietZone={n(5)}
-            size={n(300)}
-            enableLinearGradient={true}
-            linearGradient={['red', 'black']}
-          />
+          {this.state.nim != ""?
+            <QRCode
+              value={this.state.nim}
+              quietZone={n(5)}
+              size={n(300)}
+              enableLinearGradient={true}
+              linearGradient={['red', 'black']}
+            />
+          :null}
         </View>
         <GarisKecil />
         <Text style={styles.bagaimana}>Bagaimana caranya ?</Text>

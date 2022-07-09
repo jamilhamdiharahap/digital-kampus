@@ -50,7 +50,7 @@ class HomePerpus extends Component {
         let data = JSON.parse(result)
         this.setState({
           nim: data.nim,
-          nama:data.fullname,
+          nama:data.nama_mhs,
           sksSelesai:data.sks_selesai,
           ipk:data.ipk,
           totalSks:data.total_sks,
@@ -125,6 +125,7 @@ class HomePerpus extends Component {
           }}>
            {daftarPerpus[3].map((item)=>(
                  <PerpusFeature
+                 key={item.title}
                  onPress={() => this.props.navigation.navigate(item.onPress)}
                  title={item.title}
                  textAngka={this.state.sisaSks}
@@ -132,6 +133,7 @@ class HomePerpus extends Component {
             ))}
            {daftarPerpus[4].map((item)=>(
                  <PerpusFeature
+                 key={item.title}
                  onPress={() => this.props.navigation.navigate(item.onPress)}
                  title={item.title}
                  textAngka={this.state.mataKuliahSelesai}
@@ -139,6 +141,7 @@ class HomePerpus extends Component {
             ))}
            {daftarPerpus[5].map((item)=>(
                  <PerpusFeature
+                 key={item.title}
                  onPress={() => this.props.navigation.navigate(item.onPress)}
                  title={item.title}
                  textAngka={this.state.semester}

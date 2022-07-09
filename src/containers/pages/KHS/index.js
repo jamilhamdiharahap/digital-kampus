@@ -41,10 +41,10 @@ export default class KHS extends React.Component {
         let data = JSON.parse(result);
         this.setState({
           nim: data.nim,
-          nama: data.fullname,
-          jurusan: data.jurusan,
+          nama: data.nama_mhs,
+          jurusan: data.jurusan.nama_jurusan,
           totalSks: data.total_sks,
-          kelas: data.kelas,
+          kelas: data.kelas.nama_kelas,
           tempatLahir: data.tempat_lahir,
           tanggalLahir: data.tanggal_lahir,
           ipk: data.ipk,

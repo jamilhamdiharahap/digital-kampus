@@ -16,6 +16,7 @@ import {
 } from 'react-native';
 
 import Footer from './../../../components/atoms/Footer';
+import IconLoading from './../../../components/atoms/IconLoading';
 import Header from './../../../components/molecules/Header';
 import Api from '../../../utils/Api/index';
 
@@ -39,7 +40,7 @@ export default class Login extends React.Component {
       nama: '',
       password: '',
     };
-    this.url = Api.host + '/user/login';
+    this.url = Api.host + '/v2/user/login';
   }
 
   async cekLogin(nim, pass) {
@@ -77,7 +78,9 @@ export default class Login extends React.Component {
               alert('Password salah');
             }
           })
-          .catch((error = () => alert('NIM tidak terdaftar.')));
+          .catch(error => {
+            alert("Mahasiswa tidak ditemukan")
+          });
       }
     } catch (error) {
       // this.setState({isLoading: false});
@@ -87,6 +90,22 @@ export default class Login extends React.Component {
   }
 
   render() {
+
+    const lupa = () => {
+      if (this.state.formNim=="") alert('Isi NIM terlebih dahulu');
+      else{
+        alert("mohon tunggu, kami akan mengirim pesan ke email anda")
+        fetch(Api.host + '/v2/user/email/lupa/'+this.state.formNim)
+              .then(response => response.json())
+              .then(json => {
+                alert(json.message)
+              })
+              .catch(error => {
+                alert("Gagal mengirim email")
+              });
+      }
+    };    
+
     return (
       <View style={styles.main}>
         <Header />
@@ -134,11 +153,10 @@ export default class Login extends React.Component {
               <Text style={styles.textLupa}>Lupa kata sandi ?</Text>
             </TouchableOpacity>
           </View>
-          {this.state.isLoading == true ? (
-            <View style={styles.bgLoading}>
-              <ActivityIndicator size="large" color="#041562" />
-            </View>
-          ) : null}
+          {this.state.isLoading ? (
+              <IconLoading/>
+          ) : (
+          <>
           <View style={styles.bgButtonMasuk}>
             <TouchableOpacity
               onPress={() => {
@@ -147,6 +165,9 @@ export default class Login extends React.Component {
               <Text style={styles.textMasuk}>Masuk</Text>
             </TouchableOpacity>
           </View>
+          </>
+          )
+  }
           {/* <View style={styles.bgTextBottom}>
             <Text>Belum memiliki akun?</Text>
             <TouchableOpacity
@@ -161,10 +182,6 @@ export default class Login extends React.Component {
     );
   }
 }
-
-const lupa = () => {
-  alert('Silahkan hubungi pihak akademik Universitas Nasional Pasim');
-};
 
 const styles = StyleSheet.create({
   main: {

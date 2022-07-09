@@ -43,8 +43,7 @@ export default class Account extends React.Component {
   }
 
   logout() {
-    AsyncStorage.removeItem('nim');
-    AsyncStorage.removeItem('nama');
+    AsyncStorage.removeItem('mahasiswa');
     this.props.navigation.navigate('Login');
   }
 
