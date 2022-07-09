@@ -1,4 +1,6 @@
-import { useNavigation } from '@react-navigation/native';
+import {ScrollView, useNavigation} from '@react-navigation/native';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {StyleSheet, Text, View, FlatList, TouchableOpacity} from 'react-native';
 
@@ -8,6 +10,7 @@ import Api from '../../../utils/Api';
 import {tinggi} from '../../../assets/styles/style';
 import IconLoading from '../../../components/atoms/IconLoading';
 import Header from '../../../components/molecules/Header';
+import {constant} from '../../../utils/constant/constant';
 import GarisAbuTipis from '../../../components/atoms/GarisAbu/garisabutipis';
 import MainButton from '../../../components/atoms/MainButton/main-button';
 
@@ -17,16 +20,31 @@ const KartuRencanaStudi = ({navigation}) => {
 
   // const [select, setSelect] = useState(dataku);
   const [itemSelected, setItemSelected] = useState([]);
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(true);
+
+  const [nim, setNim] = useState('');
+  const [idMhs, setIdMhs] = useState(null);
+  const [disable, setDisable] = useState(true);
 
   useEffect(() => {
-    fetch(Api.host + '/matkul/0203181044')
-      .then(response => response.json())
-      .then(json => {
-        setData(json.data)
-        setIsLoading(false)
-      });
-  }, []);
+    AsyncStorage.getItem('mahasiswa', (error, result) => {
+      if (result) {
+        let data = JSON.parse(result);
+        setNim(data.nim);
+        setIdMhs(data.id_mahasiswa);
+        if (nim != '') {
+          fetch(Api.host + '/v2/matkul/' + nim)
+            .then(response => response.json())
+            .then(json => {
+              setData(json.data);
+              setIsLoading(false);
+              if (json.data == null) alert(json.message);
+            })
+            .catch(err => alert('gagal mendapatkan data mata kuliah'));
+        }
+      }
+    });
+  }, [nim]);
 
   useEffect(() => {
     let tamp;
@@ -41,53 +59,54 @@ const KartuRencanaStudi = ({navigation}) => {
 
   const ketikDiKlik = item => {
     if (item.isSelected == false) {
-      setItemSelected([...itemSelected, item.kode_matkul]);
+      setItemSelected([...itemSelected, item.id_kurikulum]);
       setDataku(current =>
         current.map(data => {
-          if (data.kode_matkul == item.kode_matkul) data.isSelected = true;
+          if (data.id_kurikulum == item.id_kurikulum) data.isSelected = true;
           return data;
         }),
       );
     } else {
       setItemSelected(current =>
         current.filter(data => {
-          return data != item.kode_matkul;
+          return data != item.id_kurikulum;
         }),
       );
 
       setDataku(current =>
         current.map(data => {
-          if (data.kode_matkul == item.kode_matkul) data.isSelected = false;
+          if (data.id_kurikulum == item.id_kurikulum) data.isSelected = false;
           return data;
         }),
       );
     }
+    setDisable(!disable);
   };
 
   const postKrs = () => {
-    
-    setIsLoading(true)
+    setIsLoading(true);
 
-    var payload ={
+    var payload = {
       method: 'POST',
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        kode_matkul: itemSelected
-      })
-    }
+        id_kurikulum: itemSelected,
+      }),
+    };
 
-    fetch(Api.host + '/krs/post/0203181044',payload)
-          .then(response => response.json())
-          .then(json => {
-            navigation.navigate("Home")
-            alert(json.message)
-          })
-          .catch(error => {
-            alert("Gagal mengisi KRS")
-          });
+    alert('sedang mengirimkan KRS, mohon tunggu');
+    fetch(Api.host + '/v2/krs/' + idMhs, payload)
+      .then(response => response.json())
+      .then(json => {
+        alert(json.message);
+        navigation.navigate('Home');
+      })
+      .catch(error => {
+        alert('Gagal mengisi KRS');
+      });
   };
 
   return (
@@ -105,49 +124,67 @@ const KartuRencanaStudi = ({navigation}) => {
           paddingHorizontal: 20,
           paddingVertical: 40,
         }}>
-          {isLoading ? <IconLoading/> : (<>
-        <FlatList
-          data={dataku}
-          keyExtractor={item => item.id}
-          key={item => item.id}
-          renderItem={({item}) => {
-            return (
-              <TouchableOpacity onPress={() => ketikDiKlik(item)}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    backgroundColor: item.isSelected ? '#2e86de' : 'white',
-                    borderRadius: 4,
-                    marginBottom: 6,
-                    padding: 5,
-                  }}>
-                  <Text
-                    style={{borderRightWidth: 2, width: 80, marginRight: 10}}>
-                    {item.kode_matkul}
-                  </Text>
-                  <Text>{item.nama}</Text>
-                </View>
-              </TouchableOpacity>
-            );
-          }}
-        />
-        <Text>{itemSelected}</Text>
-        <TouchableOpacity onPress={postKrs}>
-          <View
+        {isLoading ? (
+          <IconLoading />
+        ) : (
+          <>
+            <ScrollView
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
               style={{
-                    alignItems: 'center',
-                    backgroundColor: 'blue',
-                    borderRadius: 4,
-                    marginBottom: 6,
-                    padding: 5,
-                  }}>
-          <Text>Isi KRS</Text>
-      </View>
-        </TouchableOpacity>
-        </>
-        )
-}
+                flex: 1,
+                width: '100%',
+              }}>
+              <FlatList
+                data={dataku}
+                keyExtractor={item => item.id_kurikulum}
+                renderItem={({item}) => {
+                  return (
+                    <TouchableOpacity onPress={() => ketikDiKlik(item)}>
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          backgroundColor: item.isSelected
+                            ? '#2e86de'
+                            : 'white',
+                          borderRadius: 4,
+                          marginBottom: 6,
+                          padding: 5,
+                          width: 500,
+                        }}>
+                        <Text
+                          style={{
+                            borderRightWidth: 2,
+                            width: 170,
+                            marginRight: 5,
+                          }}>
+                          Semester {item.mata_kuliah.semester} -{' '}
+                          {item.mata_kuliah.kode_matkul}
+                        </Text>
+                        <Text style={{fontWeight: 'bold', marginLeft: 5}}>
+                          {item.mata_kuliah.nama_matkul}
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+                  );
+                }}
+              />
+            </ScrollView>
+            <TouchableOpacity onPress={postKrs} disabled={disable}>
+              <View
+                style={{
+                  alignItems: 'center',
+                  backgroundColor: disable ? 'black' : constant.warnaBackground,
+                  borderRadius: 4,
+                  padding: 8,
+                  marginTop: 15,
+                }}>
+                <Text style={{color: 'white'}}>ISI KRS</Text>
+              </View>
+            </TouchableOpacity>
+          </>
+        )}
       </View>
     </View>
   );

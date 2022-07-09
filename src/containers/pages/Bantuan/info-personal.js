@@ -1,11 +1,26 @@
-import React, {Component} from 'react';
-import {View, Text, TouchableOpacity, Image, TextInput} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import GarisAbuHitam from '../../../components/atoms/GarisAbu/garisabuhitam';
-import {color} from 'react-native-reanimated';
-import {constant} from '../../../utils/constant/constant';
+
 import {ScrollView} from '@react-navigation/native';
+
+import React, {Component} from 'react';
+
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  TouchableHighlight,
+  Modal,
+  TouchableWithoutFeedback,
+  TextInput,
+} from 'react-native';
+
+import {color} from 'react-native-reanimated';
+
+import {tinggi} from '../../../assets/styles/style';
 import Header from '../../../components/molecules/Header';
+import {constant} from '../../../utils/constant/constant';
+import GarisAbuHitam from '../../../components/atoms/GarisAbu/garisabuhitam';
+import MainButton from '../../../components/atoms/MainButton/main-button';
 export default class InfoPersonal extends Component {
   constructor(props) {
     super(props);
@@ -18,14 +33,14 @@ export default class InfoPersonal extends Component {
       agama: '',
       jenis_kelamin: '',
       tempat_lahir: '',
-      semester: '',
       jurusan: '',
       kelas: '',
       tahun_angkatan: '',
-      nik:'',
-      kota:'',
-      nama_ibu_kandung:'',
-      fakultas:''
+      nik: '',
+      alamat: '',
+      nama_ibu_kandung: '',
+      fakultas: '',
+      modalVisible: false,
     };
 
     AsyncStorage.getItem('mahasiswa', (error, result) => {
@@ -33,53 +48,94 @@ export default class InfoPersonal extends Component {
         let data = JSON.parse(result);
         this.setState({
           nim: data.nim,
-          nama: data.fullname,
+          nama: data.nama_mhs,
           email: data.email,
           no_hp: data.no_hp,
           agama: data.agama,
           jenis_kelamin: data.jenis_kelamin,
           tanggal_lahir: data.tanggal_lahir,
           tempat_lahir: data.tempat_lahir,
-          semester: data.semester,
-          jurusan: data.jurusan,
-          kelas: data.kelas,
+          jurusan: data.jurusan.nama_jurusan,
+          kelas: data.kelas.nama_kelas,
           tahun_angkatan: data.tahun_angkatan,
-          nik:data.nik,
-          kota:data.kota,
-          nama_ibu_kandung:data.nama_ibu_kandung,
-          fakultas:data.fakultas
+          nik: data.nik,
+          alamat: data.alamat,
+          nama_ibu_kandung: data.nama_ibu_kandung,
+          fakultas: data.jurusan.fakultas.nama_fakultas,
         });
       }
     });
   }
   render() {
+    const Popup = () => {
+      return (
+        <Modal
+          visible={this.state.modalVisible}
+          transparent={true}
+          animationType="slide">
+          <View style={{flex: 1, justifyContent: 'flex-end'}}>
+            <TouchableWithoutFeedback
+              onPress={() => {
+                this.setState({modalVisible: !this.state.modalVisible});
+              }}>
+              <View
+                style={{
+                  height: tinggi / 1.27,
+                }}></View>
+            </TouchableWithoutFeedback>
+            <View
+              style={{
+                backgroundColor: 'white',
+                borderTopRightRadius: 20,
+                borderTopLeftRadius: 20,
+              }}>
+              <TouchableHighlight
+                onPress={() => {
+                  this.setState({modalVisible: !this.state.modalVisible});
+                }}>
+                <View
+                  style={{
+                    backgroundColor: '#041562',
+                    borderTopRightRadius: 20,
+                    borderTopLeftRadius: 20,
+                    height: 35,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                  <Text style={{color: 'white', fontSize: 16}}>
+                    Update Profil
+                  </Text>
+                </View>
+              </TouchableHighlight>
+              <View
+                style={{
+                  height: tinggi / 5,
+                  padding: 12,
+                  justifyContent: 'space-around',
+                  alignItems: 'center',
+                }}>
+                <MainButton
+                  teks="Update Password"
+                  width={250}
+                  link={() => {
+                    this.props.navigation.navigate('KartuRencanaStudi');
+                  }}
+                />
+                <MainButton
+                  teks="Update Foto"
+                  width={250}
+                  link={() => {
+                    this.props.navigation.navigate('KartuRencanaStudi');
+                  }}
+                />
+              </View>
+            </View>
+          </View>
+        </Modal>
+      );
+    };
     return (
       <>
-        {/* <View
-          style={{
-            justifyContent: 'space-between',
-            flexDirection: 'row',
-            alignItems: 'center',
-            padding: 10,
-            backgroundColor: '#EEEEEE',
-          }}>
-          <TouchableOpacity>
-            <Image
-              style={{
-                width: 35,
-                height: 20,
-              }}
-              source={require('../../../assets/images/icon/back.png')}
-            />
-          </TouchableOpacity>
-          <Text
-            style={{
-              fontSize: 12,
-              color: constant.warnaBackground,
-            }}>
-            Ajukan Perubahan Data
-          </Text>
-        </View> */}
         <Header />
         <View
           style={{
@@ -120,18 +176,8 @@ export default class InfoPersonal extends Component {
                   selectTextOnFocus={false}
                 />
                 <Text>
-                  {this.state.tempat_lahir}, {this.state.tanggal_lahir}
+                  {this.state.tempat_lahir}, {this.state.tanggal_lahir.substring(0,10)}
                 </Text>
-              </View>
-              <GarisAbuHitam />
-              <View>
-                <TextInput
-                  style={{fontSize: 10}}
-                  value="Semester"
-                  editable={false}
-                  selectTextOnFocus={false}
-                />
-                <Text>{this.state.semester}</Text>
               </View>
               <GarisAbuHitam />
               <View>
@@ -174,7 +220,7 @@ export default class InfoPersonal extends Component {
                 <Text>{this.state.email}</Text>
               </View>
               <GarisAbuHitam />
-              <View>
+              {/* <View>
                 <TextInput
                   style={{fontSize: 10}}
                   value="Nik"
@@ -183,7 +229,7 @@ export default class InfoPersonal extends Component {
                 />
                 <Text>{this.state.nik}</Text>
               </View>
-              <GarisAbuHitam />
+              <GarisAbuHitam /> */}
               <View>
                 <TextInput
                   style={{fontSize: 10}}
@@ -197,14 +243,14 @@ export default class InfoPersonal extends Component {
               <View>
                 <TextInput
                   style={{fontSize: 10}}
-                  value="Kota"
+                  value="Alamat"
                   editable={false}
                   selectTextOnFocus={false}
                 />
-                <Text>{this.state.kota}</Text>
+                <Text>{this.state.alamat}</Text>
               </View>
               <GarisAbuHitam />
-              <View>
+              {/* <View>
                 <TextInput
                   style={{fontSize: 10}}
                   value="No.Handpone"
@@ -213,7 +259,7 @@ export default class InfoPersonal extends Component {
                 />
                 <Text>{this.state.no_hp}</Text>
               </View>
-              <GarisAbuHitam />
+              <GarisAbuHitam /> */}
               <View>
                 <TextInput
                   style={{fontSize: 10}}
@@ -224,7 +270,7 @@ export default class InfoPersonal extends Component {
                 <Text>{this.state.jenis_kelamin}</Text>
               </View>
               <GarisAbuHitam />
-              <View>
+              {/* <View>
                 <TextInput
                   style={{fontSize: 10}}
                   value="Ibu Kandung"
@@ -233,7 +279,7 @@ export default class InfoPersonal extends Component {
                 />
                 <Text>{this.state.nama_ibu_kandung}</Text>
               </View>
-              <GarisAbuHitam />
+              <GarisAbuHitam /> */}
               <View>
                 <TextInput
                   style={{fontSize: 10}}
@@ -244,18 +290,44 @@ export default class InfoPersonal extends Component {
                 <Text>{this.state.fakultas}</Text>
               </View>
               <GarisAbuHitam />
-              <View>
-                <TextInput
-                  style={{fontSize: 10}}
-                  value=""
-                  editable={false}
-                  selectTextOnFocus={false}
-                />
-                <Text>{this.state.fakultas}</Text>
-              </View>
             </View>
           </ScrollView>
+          <View
+            style={{
+              height: '15%',
+              paddingTop: 16,
+            }}>
+            <TouchableOpacity
+              style={{
+                elevation: 8,
+                backgroundColor: constant.warnaBackground,
+                borderRadius: 10,
+                paddingVertical: 10,
+                paddingHorizontal: -8,
+                width: '80%',
+                alignSelf: 'center',
+              }}
+              onPress={() => {
+                this.setState({modalVisible: !this.state.modalVisible});
+              }}>
+              <Text
+                style={{
+                  fontSize: 16,
+                  color: '#fff',
+                  fontWeight: 'bold',
+                  alignSelf: 'center',
+                  textTransform: 'uppercase',
+                  color: 'white',
+                  textAlign: 'center',
+                  fontWeight: 'bold',
+                  borderTopRightRadius: 80,
+                }}>
+                Update Profil
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
+        <Popup />
       </>
     );
   }

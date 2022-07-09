@@ -26,7 +26,7 @@ export const daftarPerpus = [
       {onPress:  'KHS', title : "Mata Kuliah Selesai"}    
     ],
     [
-      {onPress:  'KHS', title : "Semester"}    
+      {onPress:  'KHS', title : "Tahun Masuk"}    
     ]
 ]
 
@@ -56,7 +56,7 @@ class HomePerpus extends Component {
           totalSks:data.total_sks,
           sisaSks:data.sisa_sks,
           mataKuliahSelesai:data.mata_kuliah_selesai,
-          semester:data.semester
+          semester:data.tahun_angkatan
         });
       }
     });

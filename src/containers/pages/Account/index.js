@@ -52,7 +52,6 @@ export default class Account extends React.Component {
       Alert.alert('Keluar', 'Yakin untuk keluar dari akun ?', [
         {
           text: 'Tidak',
-          // onPress: () => AsyncStorage.setItem('@nim', '0203181044'),
         },
         {
           text: 'Ya',
@@ -129,14 +128,13 @@ export default class Account extends React.Component {
               }}>
               <GarisAbuTipis />
               <TouchableOpacity
-                // style={{paddingTop: 16}}
                 onPress={() => this.props.navigation.navigate('InfoPersonal')}>
                 <View
                   style={{
                     flexDirection: 'row',
                     alignItems: 'center',
                     marginLeft: 20,
-                    padding:6
+                    padding: 6,
                   }}>
                   <Image
                     style={{
@@ -156,7 +154,7 @@ export default class Account extends React.Component {
                     flexDirection: 'row',
                     alignItems: 'center',
                     marginLeft: 20,
-                    padding:6
+                    padding: 6,
                   }}>
                   <Image
                     style={{
@@ -173,110 +171,31 @@ export default class Account extends React.Component {
             <TouchableOpacity
               style={{
                 elevation: 8,
-                backgroundColor: '#1C2938',
+                backgroundColor: constant.warnaBackground,
                 borderRadius: 10,
                 paddingVertical: 10,
-                paddingHorizontal: 12,
+                paddingHorizontal: -8,
                 marginTop: 16,
+                width:"80%",
+                alignSelf:'center'
               }}
-              onPress={() => this.props.navigation.navigate('Login')}>
+              onPress={()=> askLogout()}>
               <Text
                 style={{
-                  fontSize: 18,
+                  fontSize: 16,
                   color: '#fff',
                   fontWeight: 'bold',
                   alignSelf: 'center',
                   textTransform: 'uppercase',
+                  color: 'white',
+                  textAlign: 'center',
+                  fontWeight: 'bold',
+                  borderTopRightRadius: 80,
                 }}>
                 Keluar
               </Text>
             </TouchableOpacity>
           </View>
-          {/* <ImageBackground
-            source={require('./../../../assets/images/dummy/pasim.jpg')}
-            style={{
-              width: '100%',
-              height: '38%',
-              flex: 1,
-              backgroundColor: 'white',
-            }}>
-            <Header /> 
-          </ImageBackground>
-          <View style={{
-            display:'flex'
-          }}>
-              <View
-                style={{
-                  height: '100%',
-                  width: '100%',
-                }}>
-                  <View style={{ backgroundColor: 'white'}}>
-                  <View>
-                        <Text>
-                        <Avatar
-                            title="Randi"
-                            size="large"
-                            rounded
-                            source={{
-                              uri:
-                                'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
-                            }}
-                        />
-                          Hello</Text>
-                  </View>
-                  <View>
-                      <DropDown judul="Info Personal" urutan={1} /> 
-                      <DropDown judul="Bantuan" urutan={2} />
-                  </View>
-                      
-                  </View>
-              </View>
-            </View>
-            <View style={{flex: 2}}>
-              <View
-                style={{
-                  backgroundColor: 'white',
-                  width: '100%',
-                  flex: 1,
-                  borderTopLeftRadius: 80,
-                  borderTopRightRadius: 80,
-                }}>
-                <View style={{alignItems: 'center'}}>
-                  <TouchableOpacity
-                    style={{
-                      backgroundColor: '#1C2938',
-                      height: 50,
-                      width: '70%',
-                      marginTop: 40,
-                      justifyContent: 'center',
-                      borderRadius: 10,
-                    }}
-                    
-                    onPress={() => askLogout()}>
-                    <Text
-                      style={{
-                        color: 'white',
-                        textAlign: 'center',
-                        fontWeight: 'bold',
-                        borderTopRightRadius: 80,
-                      }}>
-                      KELUAR
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </View>
-            <View style={{flex: 1}}>
-              <Text
-                style={{
-                  marginTop: 60,
-                  textAlign: 'center',
-                  color: '#adadad',
-                  backgroundColor: 'white',
-                }}>
-                ©Copyright Digital Kampus 2022
-              </Text>
-            </View> */}
         </ScrollView>
         <Navbar />
       </View>

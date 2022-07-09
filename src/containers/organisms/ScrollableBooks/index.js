@@ -224,66 +224,6 @@ class ScrollableBooks extends Component {
   }
    
   render() {
-    const Popup = () => {
-      return (
-        <Modal
-          visible={this.state.modalVisible}
-          transparent={true}
-          animationType="slide">
-          <View style={{flex: 1, justifyContent: 'flex-end'}}>
-            <TouchableWithoutFeedback
-              onPress={() => {
-                this.setState({modalVisible: !this.state.modalVisible});
-              }}>
-              <View
-                style={{
-                  height: tinggi / 1.27,
-                }}></View>
-            </TouchableWithoutFeedback>
-            <View
-              style={{
-                backgroundColor: 'white',
-                borderTopRightRadius: 20,
-                borderTopLeftRadius: 20,
-              }}>
-              <TouchableHighlight
-                onPress={() => {
-                  this.setState({modalVisible: !this.state.modalVisible});
-                }}>
-                <View
-                  style={{
-                    backgroundColor: '#041562',
-                    borderTopRightRadius: 20,
-                    borderTopLeftRadius: 20,
-                    height: 35,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}>
-                  <Text style={{color: 'white', fontSize: 16}}>
-                    Pengisian KRS
-                  </Text>
-                </View>
-              </TouchableHighlight>
-              <View
-                style={{
-                  height: tinggi / 5,
-                  padding: 12,
-                  justifyContent: 'space-around',
-                  alignItems: 'center',
-                }}>
-                      <MainButton
-                      teks={"kelas "+ this.state.kelas}
-                      width={250}
-                      link={() => {
-                        this.props.navigation.navigate('KartuRencanaStudi');
-                      }}
-                    />  
-              </View>
-            </View>
-          </View>
-        </Modal>
-      );
-    };
     return (
       <View
         style={{
@@ -300,7 +240,7 @@ class ScrollableBooks extends Component {
           <MainButton
             teks="KRS"
             link={() => {
-              this.setState({modalVisible: !this.state.modalVisible});
+              this.props.navigation.navigate('KartuRencanaStudi');
             }}
             width={80}
           />
@@ -354,7 +294,6 @@ class ScrollableBooks extends Component {
           navigate={this.props.navigation.navigate}
           listData={this.state.listData}
         />
-        <Popup />
       </View>
     );
   }
