@@ -5,7 +5,7 @@ import normalize from 'react-native-normalize';
 import Header from '../../../components/molecules/Header';
 import Api from '../../../utils/Api';
 
-const UpdatePassword = () => {
+const UpdatePassword = ({navigation}) => {
   let iconStyle = {
     iconMata: {
       height: normalize(20),
@@ -30,11 +30,12 @@ const UpdatePassword = () => {
   }, [password]);
 
   const update = () => {
-    if (newPass == ' ' || newPass < 6) {
-      alert('Isi Password Dengan Benar');
+    if (newPass == '' || newPass.length < 8) {
+      alert('Isi password minimal 8 karakter');
     } else if (pass == newPass) {
       alert('Password Telah Digunakan');
     } else {
+      alert("mohon tunggu")
       fetch(Api.host + '/v2/user/update-password', {
         method: 'POST',
         headers: {
@@ -50,6 +51,7 @@ const UpdatePassword = () => {
       then(response => response.json()).
       then(json => {
         alert(json.message);
+        if (json.respon_code == 200) navigation.navigate("Login")
       }).catch(error => alert(error))
     }
   };
@@ -124,8 +126,8 @@ const UpdatePassword = () => {
           >
           <Text style={{color: 'white', fontSize: 16}}>Update</Text>
         </TouchableOpacity>
-        <Text>{pass}</Text>
-        <Text>{newPass}</Text>
+        {/* <Text>{pass}</Text>
+        <Text>{newPass}</Text> */}
       </View>
     </View>
   );

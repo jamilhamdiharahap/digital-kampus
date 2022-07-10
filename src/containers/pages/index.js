@@ -18,10 +18,9 @@ import Riwayat from './Riwayat';
 import RiwayatSelesai from './RiwayatSelesai';
 import ScanQRCode from './ScanQRCode';
 import SplashScreen from './SplashScreen';
-import UpdatePhoto from './Update/updatePhoto';
 import InfoPersonal from './Bantuan/info-personal';
-import UpdateFoto from './update/update-foto';
-import UpdatePassword from './update/update-password';
+import UpdatePhoto from './Update/updatePhoto';
+import UpdatePassword from './Update/update-password';
 
 export {
   Auth,
@@ -45,6 +44,6 @@ export {
   DetailInformasiAkademi,
   KartuRencanaStudi,
   InfoPersonal,
-  UpdateFoto,
+  UpdatePhoto,
   UpdatePassword
 };
