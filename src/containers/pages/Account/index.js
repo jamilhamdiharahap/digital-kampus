@@ -14,7 +14,7 @@ import {
   Button,
 } from 'react-native';
 
-import {Avatar} from 'react-native-elements';
+import {Avatar, Badge} from 'react-native-elements';
 
 import GarisAbu from './../../../components/atoms/GarisAbu';
 import Header from './../../../components/molecules/Header';
@@ -28,13 +28,13 @@ export default class Account extends React.Component {
     this.state = {
       nim: '',
       nama: '',
-      image: '',
+      image: null,
     };
     AsyncStorage.getItem('mahasiswa', (error, result) => {
       if (result) {
         let data = JSON.parse(result);
         this.setState({
-          nama: data.fullname,
+          nama: data.nama_mhs,
           nim: data.nim,
           image: data.foto,
         });
@@ -109,22 +109,33 @@ export default class Account extends React.Component {
                 flex: 1,
                 alignItems: 'center',
               }}>
-              <Avatar
-                size="large"
-                rounded
-                source={{
-                  uri:
-                    this.state.image == ''
-                      ? 'https://commons.wikimedia.org/wiki/File:User-avatar.svg'
-                      : this.state.image,
-                }}
-              />
+              <View>
+                <Avatar
+                  rounded
+                  size="xlarge"
+                  title={this.state.nama.substring(0, 1)}
+                  source={{
+                    uri: this.state.image,
+                  }}
+                />
+                <Badge
+                  status="success"
+                  value="Online"
+                  containerStyle={{
+                    position: 'absolute',
+                    top: -0.1,
+                    right: -0.1,
+                  }}
+                />
+              </View>
               <Text style={{marginTop: 10}}>{this.state.nim}</Text>
-              <Text style={{marginTop: 10}}>{this.state.nama}</Text>
+              <Text style={{marginTop: 4, fontWeight: 'bold'}}>
+                {this.state.nama}
+              </Text>
             </View>
             <View
               style={{
-                marginTop: 50,
+                marginTop: 5,
               }}>
               <GarisAbuTipis />
               <TouchableOpacity
@@ -175,11 +186,11 @@ export default class Account extends React.Component {
                 borderRadius: 10,
                 paddingVertical: 10,
                 paddingHorizontal: -8,
-                marginTop: 16,
-                width:"80%",
-                alignSelf:'center'
+                marginTop: 40,
+                width: '80%',
+                alignSelf: 'center',
               }}
-              onPress={()=> askLogout()}>
+              onPress={() => askLogout()}>
               <Text
                 style={{
                   fontSize: 16,

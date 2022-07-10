@@ -50,7 +50,7 @@ export default class InfoPersonal extends Component {
           nim: data.nim,
           nama: data.nama_mhs,
           email: data.email,
-          no_hp: data.no_hp,
+          no_hp: data.no_handphone,
           agama: data.agama,
           jenis_kelamin: data.jenis_kelamin,
           tanggal_lahir: data.tanggal_lahir,
@@ -60,7 +60,7 @@ export default class InfoPersonal extends Component {
           tahun_angkatan: data.tahun_angkatan,
           nik: data.nik,
           alamat: data.alamat,
-          nama_ibu_kandung: data.nama_ibu_kandung,
+          nama_ibu_kandung: data.ibu_kandung,
           fakultas: data.jurusan.fakultas.nama_fakultas,
         });
       }
@@ -125,7 +125,8 @@ export default class InfoPersonal extends Component {
                   teks="Update Foto"
                   width={250}
                   link={() => {
-                    this.props.navigation.navigate('KartuRencanaStudi');
+                    this.setState({modalVisible: !this.state.modalVisible});
+                    this.props.navigation.navigate('UpdatePhoto');
                   }}
                 />
               </View>
@@ -176,7 +177,8 @@ export default class InfoPersonal extends Component {
                   selectTextOnFocus={false}
                 />
                 <Text>
-                  {this.state.tempat_lahir}, {this.state.tanggal_lahir.substring(0,10)}
+                  {this.state.tempat_lahir},{' '}
+                  {this.state.tanggal_lahir.substring(0, 10)}
                 </Text>
               </View>
               <GarisAbuHitam />
@@ -220,7 +222,7 @@ export default class InfoPersonal extends Component {
                 <Text>{this.state.email}</Text>
               </View>
               <GarisAbuHitam />
-              {/* <View>
+              <View>
                 <TextInput
                   style={{fontSize: 10}}
                   value="Nik"
@@ -229,7 +231,7 @@ export default class InfoPersonal extends Component {
                 />
                 <Text>{this.state.nik}</Text>
               </View>
-              <GarisAbuHitam /> */}
+              <GarisAbuHitam />
               <View>
                 <TextInput
                   style={{fontSize: 10}}
@@ -250,7 +252,7 @@ export default class InfoPersonal extends Component {
                 <Text>{this.state.alamat}</Text>
               </View>
               <GarisAbuHitam />
-              {/* <View>
+              <View>
                 <TextInput
                   style={{fontSize: 10}}
                   value="No.Handpone"
@@ -259,7 +261,7 @@ export default class InfoPersonal extends Component {
                 />
                 <Text>{this.state.no_hp}</Text>
               </View>
-              <GarisAbuHitam /> */}
+              <GarisAbuHitam />
               <View>
                 <TextInput
                   style={{fontSize: 10}}
@@ -270,7 +272,7 @@ export default class InfoPersonal extends Component {
                 <Text>{this.state.jenis_kelamin}</Text>
               </View>
               <GarisAbuHitam />
-              {/* <View>
+              <View>
                 <TextInput
                   style={{fontSize: 10}}
                   value="Ibu Kandung"
@@ -279,7 +281,7 @@ export default class InfoPersonal extends Component {
                 />
                 <Text>{this.state.nama_ibu_kandung}</Text>
               </View>
-              <GarisAbuHitam /> */}
+              <GarisAbuHitam />
               <View>
                 <TextInput
                   style={{fontSize: 10}}

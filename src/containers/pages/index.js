@@ -18,7 +18,7 @@ import Riwayat from './Riwayat';
 import RiwayatSelesai from './RiwayatSelesai';
 import ScanQRCode from './ScanQRCode';
 import SplashScreen from './SplashScreen';
-
+import UpdatePhoto from './Update/updatePhoto';
 import InfoPersonal from './Bantuan/info-personal';
 
 export {
@@ -43,4 +43,5 @@ export {
   DetailInformasiAkademi,
   KartuRencanaStudi,
   InfoPersonal,
+  UpdatePhoto,
 };

@@ -178,7 +178,7 @@ export default class KHS extends React.Component {
               <Informasi teks1="Tempat Lahir" teks2={this.state.tempatLahir} />
               <Informasi
                 teks1="Tanggal Lahir"
-                teks2={this.state.tanggalLahir.substring(0,10)}
+                teks2={this.state.tanggalLahir.substring(0, 10)}
               />
               <Informasi
                 teks1="IPK"
@@ -213,6 +213,7 @@ export default class KHS extends React.Component {
                       <Row
                         data={item}
                         flexArr={[0.2, 0.5, 2, 0.3, 0.3, 0.3, 0.3, 0.3]}
+                        key={item[0]}
                         style={{
                           width: 700,
                           height: 40,

@@ -10,26 +10,13 @@ import PerpusFeature from './../../../components/molecules/PerpusFeature';
 import {constant} from '../../../utils/constant/constant';
 
 export const daftarPerpus = [
-    [
-      {onPress:  'KHS',title : "Sks Selesai"}
-    ],
-    [
-      {onPress: 'KHS',title : "IPK Saat Ini"}
-    ],
-    [
-      {onPress:  'KHS',title : "Total SKS"}
-    ],
-    [
-      {onPress:  'KHS',title : "Sisa SKS"}
-    ],
-    [
-      {onPress:  'KHS', title : "Mata Kuliah Selesai"}    
-    ],
-    [
-      {onPress:  'KHS', title : "Tahun Masuk"}    
-    ]
-]
-
+  [{onPress: 'KHS', title: 'SKS Selesai'}],
+  [{onPress: 'KHS', title: 'IPK Saat Ini'}],
+  [{onPress: 'KHS', title: 'Total SKS'}],
+  [{onPress: 'KHS', title: 'Sisa SKS'}],
+  [{onPress: 'KHS', title: 'Mata Kuliah Selesai'}],
+  [{onPress: 'KHS', title: 'Tahun Masuk'}],
+];
 
 class HomePerpus extends Component {
   constructor(props) {
@@ -37,30 +24,29 @@ class HomePerpus extends Component {
     this.state = {
       nim: '',
       nama: '',
-      sksSelesai:'',
-      ipk :'',
-      totalSks:'',
-      sisaSks : '',
-      mataKuliahSelesai : '',
-      semester : ''
+      sksSelesai: '',
+      ipk: '',
+      totalSks: '',
+      sisaSks: '',
+      mataKuliahSelesai: '',
+      semester: '',
     };
 
     AsyncStorage.getItem('mahasiswa', (error, result) => {
       if (result) {
-        let data = JSON.parse(result)
+        let data = JSON.parse(result);
         this.setState({
           nim: data.nim,
-          nama:data.nama_mhs,
-          sksSelesai:data.sks_selesai,
-          ipk:data.ipk,
-          totalSks:data.total_sks,
-          sisaSks:data.sisa_sks,
-          mataKuliahSelesai:data.mata_kuliah_selesai,
-          semester:data.tahun_angkatan
+          nama: data.nama_mhs,
+          sksSelesai: data.sks_selesai,
+          ipk: data.ipk,
+          totalSks: data.total_sks,
+          sisaSks: data.sisa_sks,
+          mataKuliahSelesai: data.mata_kuliah_selesai,
+          semester: data.tahun_angkatan,
         });
       }
     });
-    
   }
 
   render() {
@@ -89,30 +75,30 @@ class HomePerpus extends Component {
             // borderBottomRightRadius: 8,
             // borderBottomLeftRadius: 8,
           }}>
-            {daftarPerpus[0].map((item)=>(
-                 <PerpusFeature
-                 key={item.title}
-                 onPress={() => this.props.navigation.navigate(item.onPress)}
-                 title={item.title}
-                 textAngka={this.state.sksSelesai}
-               /> 
-            ))}
-            {daftarPerpus[1].map((item)=>(
-                 <PerpusFeature
-                 key={item.title}
-                 onPress={() => this.props.navigation.navigate(item.onPress)}
-                 title={item.title}
-                 textAngka={this.state.ipk.toString().substring(0,4)}
-               /> 
-            ))}
-            {daftarPerpus[2].map((item)=>(
-                 <PerpusFeature
-                 key={item.title}
-                 onPress={() => this.props.navigation.navigate(item.onPress)}
-                 title={item.title}
-                 textAngka={this.state.totalSks}
-               /> 
-            ))}
+          {daftarPerpus[0].map(item => (
+            <PerpusFeature
+              key={item.title}
+              onPress={() => this.props.navigation.navigate(item.onPress)}
+              title={item.title}
+              textAngka={this.state.sksSelesai}
+            />
+          ))}
+          {daftarPerpus[1].map(item => (
+            <PerpusFeature
+              key={item.title}
+              onPress={() => this.props.navigation.navigate(item.onPress)}
+              title={item.title}
+              textAngka={this.state.ipk.toString().substring(0, 4)}
+            />
+          ))}
+          {daftarPerpus[2].map(item => (
+            <PerpusFeature
+              key={item.title}
+              onPress={() => this.props.navigation.navigate(item.onPress)}
+              title={item.title}
+              textAngka={this.state.totalSks}
+            />
+          ))}
         </View>
         <View
           style={{
@@ -123,30 +109,30 @@ class HomePerpus extends Component {
             borderBottomRightRadius: 8,
             borderBottomLeftRadius: 8,
           }}>
-           {daftarPerpus[3].map((item)=>(
-                 <PerpusFeature
-                 key={item.title}
-                 onPress={() => this.props.navigation.navigate(item.onPress)}
-                 title={item.title}
-                 textAngka={this.state.sisaSks}
-               /> 
-            ))}
-           {daftarPerpus[4].map((item)=>(
-                 <PerpusFeature
-                 key={item.title}
-                 onPress={() => this.props.navigation.navigate(item.onPress)}
-                 title={item.title}
-                 textAngka={this.state.mataKuliahSelesai}
-               /> 
-            ))}
-           {daftarPerpus[5].map((item)=>(
-                 <PerpusFeature
-                 key={item.title}
-                 onPress={() => this.props.navigation.navigate(item.onPress)}
-                 title={item.title}
-                 textAngka={this.state.semester}
-               /> 
-            ))}
+          {daftarPerpus[3].map(item => (
+            <PerpusFeature
+              key={item.title}
+              onPress={() => this.props.navigation.navigate(item.onPress)}
+              title={item.title}
+              textAngka={this.state.sisaSks}
+            />
+          ))}
+          {daftarPerpus[4].map(item => (
+            <PerpusFeature
+              key={item.title}
+              onPress={() => this.props.navigation.navigate(item.onPress)}
+              title={item.title}
+              textAngka={this.state.mataKuliahSelesai}
+            />
+          ))}
+          {daftarPerpus[5].map(item => (
+            <PerpusFeature
+              key={item.title}
+              onPress={() => this.props.navigation.navigate(item.onPress)}
+              title={item.title}
+              textAngka={this.state.semester}
+            />
+          ))}
         </View>
       </View>
     );
