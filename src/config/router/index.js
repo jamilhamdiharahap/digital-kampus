@@ -24,6 +24,8 @@ import {
   DetailInformasiAkademi,
   KartuRencanaStudi,
   InfoPersonal,
+  UpdateFoto,
+  UpdatePassword,
 } from './../../containers/pages';
 
 const HomeStack = createStackNavigator(
@@ -65,6 +67,8 @@ const AccountStack = createStackNavigator(
     Account,
     Bantuan,
     InfoPersonal,
+    UpdateFoto,
+    UpdatePassword,
   },
   {
     headerMode: 'none',

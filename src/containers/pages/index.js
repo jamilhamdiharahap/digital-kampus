@@ -20,6 +20,8 @@ import ScanQRCode from './ScanQRCode';
 import SplashScreen from './SplashScreen';
 
 import InfoPersonal from './Bantuan/info-personal';
+import UpdateFoto from './update/update-foto';
+import UpdatePassword from './update/update-password';
 
 export {
   Auth,
@@ -43,4 +45,6 @@ export {
   DetailInformasiAkademi,
   KartuRencanaStudi,
   InfoPersonal,
+  UpdateFoto,
+  UpdatePassword
 };
