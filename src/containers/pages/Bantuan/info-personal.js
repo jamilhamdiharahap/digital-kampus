@@ -118,7 +118,7 @@ export default class InfoPersonal extends Component {
                   teks="Update Password"
                   width={250}
                   link={() => {
-                    this.props.navigation.navigate('KartuRencanaStudi');
+                    this.props.navigation.navigate('UpdatePassword');
                   }}
                 />
                 <MainButton
