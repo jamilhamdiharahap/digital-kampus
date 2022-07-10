@@ -1,4 +1,4 @@
-package com.perpus.pasim;
+package com.digitalkampus.pasim;
 
 import com.facebook.react.ReactActivity;
 import android.os.Bundle;

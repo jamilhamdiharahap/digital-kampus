@@ -132,7 +132,7 @@ android {
 
     defaultConfig {
         missingDimensionStrategy 'react-native-camera', 'mlkit' // <--- insert this line
-        applicationId "com.perpus.pasim"
+        applicationId "com.digitalkampus.pasim"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
@@ -171,11 +171,11 @@ android {
         release {
             // Caution! In production, you need to generate your own keystore file.
             // see https://reactnative.dev/docs/signed-apk-android.
+            signingConfig signingConfigs.release
             signingConfig signingConfigs.debug
             minifyEnabled enableProguardInReleaseBuilds
             shrinkResources true
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
-            signingConfig signingConfigs.release
         }
     }
 

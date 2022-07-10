@@ -113,7 +113,6 @@ export default class Account extends React.Component {
                 <Avatar
                   rounded
                   size="xlarge"
-                  title={this.state.nama.substring(0, 1)}
                   source={{
                     uri: this.state.image,
                   }}

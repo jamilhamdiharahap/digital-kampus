@@ -1,4 +1,4 @@
-package com.perpus.pasim;
+package com.digitalkampus.pasim;
 
 import android.app.Application;
 import android.content.Context;

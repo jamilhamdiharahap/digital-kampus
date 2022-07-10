@@ -35,12 +35,12 @@ android_library(
 
 android_build_config(
     name = "build_config",
-    package = "com.perpus.pasim",
+    package = "com.digitalkampus.pasim",
 )
 
 android_resource(
     name = "res",
-    package = "com.perpus.pasim",
+    package = "com.digitalkampus.pasim",
     res = "src/main/res",
 )
 
