@@ -24,7 +24,6 @@ const KartuRencanaStudi = ({navigation}) => {
 
   const [nim, setNim] = useState('');
   const [idMhs, setIdMhs] = useState(null);
-  const [disable, setDisable] = useState(true);
 
   useEffect(() => {
     AsyncStorage.getItem('mahasiswa', (error, result) => {
@@ -80,7 +79,6 @@ const KartuRencanaStudi = ({navigation}) => {
         }),
       );
     }
-    setDisable(!disable);
   };
 
   const postKrs = () => {
@@ -156,7 +154,7 @@ const KartuRencanaStudi = ({navigation}) => {
                         <Text
                           style={{
                             borderRightWidth: 2,
-                            width: 170,
+                            width: 150,
                             marginRight: 5,
                           }}>
                           Semester {item.mata_kuliah.semester} -{' '}
@@ -171,18 +169,20 @@ const KartuRencanaStudi = ({navigation}) => {
                 }}
               />
             </ScrollView>
-            <TouchableOpacity onPress={postKrs} disabled={disable}>
-              <View
-                style={{
-                  alignItems: 'center',
-                  backgroundColor: disable ? 'black' : constant.warnaBackground,
-                  borderRadius: 4,
-                  padding: 8,
-                  marginTop: 15,
-                }}>
-                <Text style={{color: 'white'}}>ISI KRS</Text>
-              </View>
-            </TouchableOpacity>
+            {itemSelected.length > 0 ? (
+              <TouchableOpacity onPress={postKrs}>
+                <View
+                  style={{
+                    alignItems: 'center',
+                    backgroundColor: constant.warnaBackground,
+                    borderRadius: 4,
+                    padding: 8,
+                    marginTop: 15,
+                  }}>
+                  <Text style={{color: 'white'}}>ISI KRS</Text>
+                </View>
+              </TouchableOpacity>
+            ) : null}
           </>
         )}
       </View>

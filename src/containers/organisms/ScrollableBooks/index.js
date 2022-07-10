@@ -158,8 +158,6 @@ function TampilSemuaBuku(props) {
   );
 }
 
-
-
 class ScrollableBooks extends Component {
   constructor(props) {
     super(props);
@@ -169,7 +167,7 @@ class ScrollableBooks extends Component {
       isLoading: true,
       tidakada: false,
       listData: [],
-      kelas :'',
+      kelas: '',
       modalVisible: false,
     };
     // this.url = 'https://masak-apa.tomorisakura.vercel.app/api/';
@@ -183,13 +181,13 @@ class ScrollableBooks extends Component {
     // hoting webhost
     AsyncStorage.getItem('mahasiswa', (error, result) => {
       if (result) {
-        let data = JSON.parse(result)
+        let data = JSON.parse(result);
         this.setState({
-          kelas : data.kelas
-        })
+          kelas: data.kelas,
+        });
       }
     });
-    this.url = Api.host + "/pengumuman";
+    this.url = Api.host + '/pengumuman';
   }
 
   componentWillUnmount() {
@@ -215,14 +213,13 @@ class ScrollableBooks extends Component {
         !this.state.listData
           ? this.setState({tidakada: true})
           : this.setState({tidakada: false});
-        
       })
       .catch(error => {
         this.setState({isLoading: false});
         this.setState({tidakada: true});
       });
   }
-   
+
   render() {
     return (
       <View
@@ -271,7 +268,7 @@ class ScrollableBooks extends Component {
                     text: 'Ya',
                     onPress: () => {
                       Linking.openURL(
-                        'https://drive.google.com/file/d/1y9nNH-QZtQA5cyMVMsUm4HJd48agIvHq/view?usp=sharing',
+                        'https://drive.google.com/drive/folders/1FfrtYTPOK76-Mg4GhHSQu3LNZoMcBGgW?usp=sharing',
                       );
                     },
                   },
