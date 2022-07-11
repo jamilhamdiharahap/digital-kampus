@@ -8,6 +8,9 @@ import {withNavigation} from 'react-navigation';
 
 import PerpusFeature from './../../../components/molecules/PerpusFeature';
 import {constant} from '../../../utils/constant/constant';
+import {useEffect} from 'react';
+
+import Api from '../../../utils/Api';
 
 export const daftarPerpus = [
   [{onPress: 'KHS', title: 'SKS Selesai'}],
@@ -45,6 +48,37 @@ class HomePerpus extends Component {
           mataKuliahSelesai: data.mata_kuliah_selesai,
           semester: data.tahun_angkatan,
         });
+
+        var payload = {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            nim: data.nim,
+            password: data.password,
+          }),
+        };
+
+        fetch(Api.host + '/v2/user/login', payload)
+          .then(response => response.json())
+          .then(json => {
+            let result = JSON.parse(json.data);
+            if (json.respon_code == 200) {
+              this.setState({
+                sksSelesai: result.sks_selesai,
+                ipk: result.ipk,
+                totalSks: result.total_sks,
+                sisaSks: result.sisa_sks,
+                mataKuliahSelesai: result.mata_kuliah_selesai,
+                semester: result.tahun_angkatan,
+              });
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          });
       }
     });
   }

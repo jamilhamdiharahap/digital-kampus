@@ -17,7 +17,7 @@ import IconLoading from '../../../components/atoms/IconLoading';
 import Header from '../../../components/molecules/Header';
 import {constant} from '../../../utils/constant/constant';
 
-export default class KHS extends React.Component {
+export default class IPSementara extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -48,7 +48,6 @@ export default class KHS extends React.Component {
           kelas: data.kelas.nama_kelas,
           tempatLahir: data.tempat_lahir,
           tanggalLahir: data.tanggal_lahir,
-          ipk: data.ipk,
         });
       }
 
@@ -71,22 +70,17 @@ export default class KHS extends React.Component {
       //   ['4', 'MM', 'APSIT', sks.tiga, '3', '0', bobot.E, sks.dua * bobot.E],
       // ];
 
-      fetch(Api.host + '/v2/khs/' + this.state.idMhs)
+      fetch(Api.host + '/v2/khs/ips/' + this.state.idMhs)
         .then(response => response.json())
         .then(json => {
-          let list = json.data;
+          this.setState({ipk: json.data.ip});
+          let list = json.data.nilai;
           let data = [];
-          for (let i = 0; i < json.data.length; i++) {
+          for (let i = 0; i < list.length; i++) {
             data.push(i + 1);
             data.push(list[i].Kurikulum.matakuliah.kode_matkul);
             data.push(list[i].Kurikulum.matakuliah.nama_matkul);
-            data.push(list[i].Kurikulum.matakuliah.sks);
-            data.push(list[i].Kurikulum.matakuliah.semester);
-            data.push(list[i].grade);
-            data.push(cekBobot(list[i].grade));
-            data.push(
-              cekTotal(list[i].grade, list[i].Kurikulum.matakuliah.sks),
-            );
+            data.push(list[i].uts);
             this.state.row.push(data);
             data = [];
           }
@@ -100,16 +94,7 @@ export default class KHS extends React.Component {
   }
 
   render() {
-    const headerKonten = [
-      'No',
-      'Kode',
-      'Mata Kuliah',
-      'Sks',
-      'Sms',
-      'Grade',
-      'Bobot',
-      'Jumlah',
-    ];
+    const headerKonten = ['No', 'Kode', 'Mata Kuliah', 'UTS'];
 
     const Informasi = ({teks1, teks2, ...rest}) => {
       return (
@@ -137,13 +122,6 @@ export default class KHS extends React.Component {
       E: 0,
     };
 
-    const CONTENT = [
-      ['1', 'MM', 'APSIT', sks.tiga, '3', 'A', bobot.A, sks.tiga * bobot.A],
-      ['2', 'MM', 'APSIT', sks.tiga, '3', '0', bobot.E, sks.dua * bobot.E],
-      ['3', 'MM', 'APSIT', sks.tiga, '3', 'B', bobot.B, sks.tiga * bobot.B],
-      ['4', 'MM', 'APSIT', sks.tiga, '3', '0', bobot.E, sks.dua * bobot.E],
-    ];
-
     return (
       <View style={{flex: 1, backgroundColor: '#e6e6e6', paddingBottom: 20}}>
         <Header />
@@ -164,27 +142,17 @@ export default class KHS extends React.Component {
                   width: '90%',
                   textAlign: 'center',
                 }}>
-                KARTU HASIL STUDI
+                NILAI DAN IP SEMENTARA
               </Text>
               <Informasi marginTop={15} teks1="NIM" teks2={this.state.nim} />
               <Informasi teks1="Nama Lengkap" teks2={this.state.nama} />
               <Informasi teks1="Program Studi" teks2={this.state.jurusan} />
-              <Informasi teks1="SKS Tempuh" teks2={this.state.totalSks} />
               <Informasi
-                teks1="Kelas"
-                teks2={this.state.kelas}
-                marginTop={30}
-              />
-              <Informasi teks1="Tempat Lahir" teks2={this.state.tempatLahir} />
-              <Informasi
-                teks1="Tanggal Lahir"
-                teks2={this.state.tanggalLahir.substring(0, 10)}
-              />
-              <Informasi
-                teks1="IPK"
-                teks2={this.state.ipk.toString().substring(0, 4)}
+                teks1="IP Sementara"
+                teks2={this.state.ipk}
                 marginBottom={40}
               />
+
               <ScrollView
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}
@@ -197,9 +165,9 @@ export default class KHS extends React.Component {
                   <Table borderStyle={{borderWidth: 1, borderColor: 'black'}}>
                     <Row
                       data={headerKonten}
-                      flexArr={[0.2, 0.5, 2, 0.3, 0.3, 0.3, 0.3, 0.3]}
+                      flexArr={[0.2, 0.4, 1, 0.5]}
                       style={{
-                        width: 700,
+                        width: 400,
                         height: 40,
                         backgroundColor: constant.warnaBackground,
                       }}
@@ -212,10 +180,10 @@ export default class KHS extends React.Component {
                     {this.state.row.map(item => (
                       <Row
                         data={item}
-                        flexArr={[0.2, 0.5, 2, 0.3, 0.3, 0.3, 0.3, 0.3]}
+                        flexArr={[0.2, 0.4, 1, 0.5]}
                         key={item[0]}
                         style={{
-                          width: 700,
+                          width: 400,
                           height: 40,
                           backgroundColor:
                             item[0] % 2 == 0 ? 'white' : '#dfe6e9',

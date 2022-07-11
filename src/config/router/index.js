@@ -26,6 +26,8 @@ import {
   InfoPersonal,
   UpdatePhoto,
   UpdatePassword,
+  UpdateKRS,
+  IPSementara,
 } from './../../containers/pages';
 
 const HomeStack = createStackNavigator(
@@ -40,6 +42,8 @@ const HomeStack = createStackNavigator(
     KHS,
     DetailInformasiAkademi,
     KartuRencanaStudi,
+    UpdateKRS,
+    IPSementara,
   },
   {
     headerMode: 'none',

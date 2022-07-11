@@ -35,7 +35,7 @@ const UpdatePassword = ({navigation}) => {
     } else if (pass == newPass) {
       alert('Password Telah Digunakan');
     } else {
-      alert("mohon tunggu")
+      alert('mohon tunggu');
       fetch(Api.host + '/v2/user/update-password', {
         method: 'POST',
         headers: {
@@ -45,18 +45,18 @@ const UpdatePassword = ({navigation}) => {
         body: JSON.stringify({
           nim: nim,
           password: pass,
-          new_password:newPass
+          new_password: newPass,
         }),
-      }).
-      then(response => response.json()).
-      then(json => {
-        alert(json.message);
-        if (json.respon_code == 200) navigation.navigate("Login")
-      }).catch(error => alert(error))
+      })
+        .then(response => response.json())
+        .then(json => {
+          alert(json.message);
+          if (json.respon_code == 200) navigation.navigate('Login');
+        })
+        .catch(error => alert(error));
     }
   };
 
-  
   return (
     <View>
       <Header />
@@ -72,7 +72,8 @@ const UpdatePassword = ({navigation}) => {
           }}>
           <TextInput
             style={{
-              borderColor: pass == '' ? 'gray' : password == pass ? 'gray' : 'red',
+              borderColor:
+                pass == '' ? 'gray' : password == pass ? 'gray' : 'red',
               width: '100%',
               borderWidth: 1,
               borderRadius: 10,
@@ -122,12 +123,9 @@ const UpdatePassword = ({navigation}) => {
             paddingVertical: 8,
             backgroundColor: '#041562',
           }}
-          onPress={update}
-          >
+          onPress={update}>
           <Text style={{color: 'white', fontSize: 16}}>Update</Text>
         </TouchableOpacity>
-        {/* <Text>{pass}</Text>
-        <Text>{newPass}</Text> */}
       </View>
     </View>
   );

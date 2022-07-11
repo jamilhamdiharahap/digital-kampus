@@ -168,7 +168,8 @@ class ScrollableBooks extends Component {
       tidakada: false,
       listData: [],
       kelas: '',
-      modalVisible: false,
+      modalKRSVisible: false,
+      modalNilaiVisible: false,
     };
     // this.url = 'https://masak-apa.tomorisakura.vercel.app/api/';
 
@@ -221,6 +222,152 @@ class ScrollableBooks extends Component {
   }
 
   render() {
+    const PopupKRS = () => {
+      return (
+        <Modal
+          visible={this.state.modalKRSVisible}
+          transparent={true}
+          animationType="slide">
+          <View style={{flex: 1, justifyContent: 'flex-end'}}>
+            <TouchableWithoutFeedback
+              onPress={() => {
+                this.setState({modalKRSVisible: !this.state.modalKRSVisible});
+              }}>
+              <View
+                style={{
+                  height: tinggi / 1.27,
+                }}></View>
+            </TouchableWithoutFeedback>
+            <View
+              style={{
+                backgroundColor: 'white',
+                borderTopRightRadius: 20,
+                borderTopLeftRadius: 20,
+              }}>
+              <TouchableHighlight
+                onPress={() => {
+                  this.setState({modalKRSVisible: !this.state.modalKRSVisible});
+                }}>
+                <View
+                  style={{
+                    backgroundColor: '#041562',
+                    borderTopRightRadius: 20,
+                    borderTopLeftRadius: 20,
+                    height: 35,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                  <Text style={{color: 'white', fontSize: 16}}>
+                    Kartu Rencana Studi
+                  </Text>
+                </View>
+              </TouchableHighlight>
+              <View
+                style={{
+                  height: tinggi / 5,
+                  padding: 12,
+                  justifyContent: 'space-around',
+                  alignItems: 'center',
+                }}>
+                <MainButton
+                  teks="Pengisian KRS"
+                  width={250}
+                  link={() => {
+                    this.props.navigation.navigate('KartuRencanaStudi');
+                  }}
+                />
+                <MainButton
+                  teks="Perubahkan KRS"
+                  width={250}
+                  link={() => {
+                    this.setState({
+                      modalKRSVisible: !this.state.modalKRSVisible,
+                    });
+                    this.props.navigation.navigate('UpdateKRS');
+                  }}
+                />
+              </View>
+            </View>
+          </View>
+        </Modal>
+      );
+    };
+
+    const PopUpNilai = () => {
+      return (
+        <Modal
+          visible={this.state.modalNilaiVisible}
+          transparent={true}
+          animationType="slide">
+          <View style={{flex: 1, justifyContent: 'flex-end'}}>
+            <TouchableWithoutFeedback
+              onPress={() => {
+                this.setState({
+                  modalNilaiVisible: !this.state.modalNilaiVisible,
+                });
+              }}>
+              <View
+                style={{
+                  height: tinggi / 1.27,
+                }}></View>
+            </TouchableWithoutFeedback>
+            <View
+              style={{
+                backgroundColor: 'white',
+                borderTopRightRadius: 20,
+                borderTopLeftRadius: 20,
+              }}>
+              <TouchableHighlight
+                onPress={() => {
+                  this.setState({
+                    modalNilaiVisible: !this.state.modalNilaiVisible,
+                  });
+                }}>
+                <View
+                  style={{
+                    backgroundColor: '#041562',
+                    borderTopRightRadius: 20,
+                    borderTopLeftRadius: 20,
+                    height: 35,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                  <Text style={{color: 'white', fontSize: 16}}>
+                    Kartu Hasil Studi
+                  </Text>
+                </View>
+              </TouchableHighlight>
+              <View
+                style={{
+                  height: tinggi / 5,
+                  padding: 12,
+                  justifyContent: 'space-around',
+                  alignItems: 'center',
+                }}>
+                <MainButton
+                  teks="Nilai dan IP Sementara"
+                  width={250}
+                  link={() => {
+                    this.props.navigation.navigate('IPSementara');
+                  }}
+                />
+                <MainButton
+                  teks="Kartu Hasil Studi"
+                  width={250}
+                  link={() => {
+                    this.setState({
+                      modalNilaiVisible: !this.state.modalNilaiVisible,
+                    });
+                    this.props.navigation.navigate('KHS');
+                  }}
+                />
+              </View>
+            </View>
+          </View>
+        </Modal>
+      );
+    };
+
     return (
       <View
         style={{
@@ -237,14 +384,14 @@ class ScrollableBooks extends Component {
           <MainButton
             teks="KRS"
             link={() => {
-              this.props.navigation.navigate('KartuRencanaStudi');
+              this.setState({modalKRSVisible: true});
             }}
             width={80}
           />
           <MainButton
             teks="KHS"
             link={() => {
-              this.props.navigation.navigate('KHS');
+              this.setState({modalNilaiVisible: true});
             }}
             width={80}
           />
@@ -291,6 +438,8 @@ class ScrollableBooks extends Component {
           navigate={this.props.navigation.navigate}
           listData={this.state.listData}
         />
+        <PopupKRS />
+        <PopUpNilai />
       </View>
     );
   }

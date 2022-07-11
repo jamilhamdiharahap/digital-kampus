@@ -21,6 +21,8 @@ import SplashScreen from './SplashScreen';
 import InfoPersonal from './Bantuan/info-personal';
 import UpdatePhoto from './Update/updatePhoto';
 import UpdatePassword from './Update/update-password';
+import UpdateKRS from './Update/update-krs';
+import IPSementara from './KHS/ip-sementara';
 
 export {
   Auth,
@@ -45,5 +47,7 @@ export {
   KartuRencanaStudi,
   InfoPersonal,
   UpdatePhoto,
-  UpdatePassword
+  UpdatePassword,
+  UpdateKRS,
+  IPSementara,
 };

@@ -14,13 +14,15 @@ import {constant} from '../../../utils/constant/constant';
 import GarisAbuTipis from '../../../components/atoms/GarisAbu/garisabutipis';
 import MainButton from '../../../components/atoms/MainButton/main-button';
 
-const KartuRencanaStudi = ({navigation}) => {
+const UpdateKRS = ({navigation}) => {
   const [data, setData] = useState([]);
   const [dataku, setDataku] = useState([]);
 
   // const [select, setSelect] = useState(dataku);
   const [itemSelected, setItemSelected] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  const [length, setLength] = useState(0);
 
   const [nim, setNim] = useState('');
   const [idMhs, setIdMhs] = useState(null);
@@ -32,7 +34,7 @@ const KartuRencanaStudi = ({navigation}) => {
         setNim(data.nim);
         setIdMhs(data.id_mahasiswa);
         if (nim != '') {
-          fetch(Api.host + '/v2/matkul/' + nim)
+          fetch(Api.host + '/v2/krs/' + data.id_mahasiswa)
             .then(response => response.json())
             .then(json => {
               setData(json.data);
@@ -49,19 +51,21 @@ const KartuRencanaStudi = ({navigation}) => {
     let tamp;
     if (data != null) {
       tamp = data.map(val => {
-        val.isSelected = false;
+        val.isSelected = true;
         return val;
       });
+
+      setLength(tamp.length);
     }
     setDataku(tamp);
   }, [data]);
 
   const ketikDiKlik = item => {
-    if (item.isSelected == false) {
+    if (item.isSelected == true) {
       setItemSelected([...itemSelected, item.id_kurikulum]);
       setDataku(current =>
         current.map(data => {
-          if (data.id_kurikulum == item.id_kurikulum) data.isSelected = true;
+          if (data.id_kurikulum == item.id_kurikulum) data.isSelected = false;
           return data;
         }),
       );
@@ -74,7 +78,7 @@ const KartuRencanaStudi = ({navigation}) => {
 
       setDataku(current =>
         current.map(data => {
-          if (data.id_kurikulum == item.id_kurikulum) data.isSelected = false;
+          if (data.id_kurikulum == item.id_kurikulum) data.isSelected = true;
           return data;
         }),
       );
@@ -85,7 +89,7 @@ const KartuRencanaStudi = ({navigation}) => {
     setIsLoading(true);
 
     var payload = {
-      method: 'POST',
+      method: 'DELETE',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
@@ -95,7 +99,7 @@ const KartuRencanaStudi = ({navigation}) => {
       }),
     };
 
-    alert('sedang mengirimkan KRS, mohon tunggu');
+    alert('sedang melakukan perubahan KRS, mohon tunggu');
     fetch(Api.host + '/v2/krs/' + idMhs, payload)
       .then(response => response.json())
       .then(json => {
@@ -103,7 +107,7 @@ const KartuRencanaStudi = ({navigation}) => {
         navigation.navigate('Home');
       })
       .catch(error => {
-        alert('Gagal mengisi KRS');
+        alert('Gagal mengubah KRS');
       });
   };
 
@@ -111,10 +115,10 @@ const KartuRencanaStudi = ({navigation}) => {
     <View style={{flex: 1}}>
       <Header />
       <Text style={{textAlign: 'center', paddingVertical: 17, fontSize: 20}}>
-        Kartu Rencana Studi
+        Perubahan Kartu Rencana Studi
       </Text>
       <Text style={{textAlign: 'center', marginBottom: 15}}>
-        Silahkan pilih mata kuliah untuk melakukan pengisian KRS
+        Silahkan pilih mata kuliah yang ingin dihapus dari KRS
       </Text>
       <View
         style={{
@@ -157,14 +161,14 @@ const KartuRencanaStudi = ({navigation}) => {
                         <Text
                           style={{
                             borderRightWidth: 2,
-                            width: 150,
+                            width: 130,
                             marginRight: 5,
                           }}>
-                          Semester {item.mata_kuliah.semester} -{' '}
-                          {item.mata_kuliah.kode_matkul}
+                          Semester {item.kurikulum.mata_kuliah.semester} -{' '}
+                          {item.kurikulum.mata_kuliah.kode_matkul}
                         </Text>
                         <Text style={{fontWeight: 'bold', marginLeft: 5}}>
-                          {item.mata_kuliah.nama_matkul}
+                          {item.kurikulum.mata_kuliah.nama_matkul}
                         </Text>
                       </View>
                     </TouchableOpacity>
@@ -182,7 +186,7 @@ const KartuRencanaStudi = ({navigation}) => {
                     padding: 8,
                     marginTop: 15,
                   }}>
-                  <Text style={{color: 'white'}}>ISI KRS</Text>
+                  <Text style={{color: 'white'}}>Lakukan perubahan KRS</Text>
                 </View>
               </TouchableOpacity>
             ) : null}
@@ -193,4 +197,4 @@ const KartuRencanaStudi = ({navigation}) => {
   );
 };
 
-export default KartuRencanaStudi;
+export default UpdateKRS;
