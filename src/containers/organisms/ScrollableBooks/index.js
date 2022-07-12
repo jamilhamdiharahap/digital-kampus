@@ -171,13 +171,6 @@ class ScrollableBooks extends Component {
       modalKRSVisible: false,
       modalNilaiVisible: false,
     };
-    // this.url = 'https://masak-apa.tomorisakura.vercel.app/api/';
-
-    // laptop
-    // this.url = 'http://192.168.137.1/Mine/PerpusPASIM/ScanBuku/ApiBuku.php';
-
-    // hp
-    // this.url = 'http://192.168.43.216/Mine/PerpusPASIM/ScanBuku/ApiBuku.php';
 
     // hoting webhost
     AsyncStorage.getItem('mahasiswa', (error, result) => {
@@ -345,13 +338,6 @@ class ScrollableBooks extends Component {
                   alignItems: 'center',
                 }}>
                 <MainButton
-                  teks="Nilai dan IP Sementara"
-                  width={250}
-                  link={() => {
-                    this.props.navigation.navigate('IPSementara');
-                  }}
-                />
-                <MainButton
                   teks="Kartu Hasil Studi"
                   width={250}
                   link={() => {
@@ -359,6 +345,23 @@ class ScrollableBooks extends Component {
                       modalNilaiVisible: !this.state.modalNilaiVisible,
                     });
                     this.props.navigation.navigate('KHS');
+                  }}
+                />
+                <MainButton
+                  teks="IP Sementara"
+                  width={250}
+                  link={() => {
+                    this.props.navigation.navigate('IPSementara');
+                  }}
+                />
+                <MainButton
+                  teks="Nilai Mata Kuliah Aktif"
+                  width={250}
+                  link={() => {
+                    this.setState({
+                      modalNilaiVisible: !this.state.modalNilaiVisible,
+                    });
+                    this.props.navigation.navigate('NilaiUts');
                   }}
                 />
               </View>
@@ -389,7 +392,7 @@ class ScrollableBooks extends Component {
             width={80}
           />
           <MainButton
-            teks="KHS"
+            teks="Nilai & KHS"
             link={() => {
               this.setState({modalNilaiVisible: true});
             }}

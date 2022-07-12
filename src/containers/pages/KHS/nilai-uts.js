@@ -17,7 +17,7 @@ import IconLoading from '../../../components/atoms/IconLoading';
 import Header from '../../../components/molecules/Header';
 import {constant} from '../../../utils/constant/constant';
 
-export default class IPSementara extends React.Component {
+export default class NilaiUts extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -29,6 +29,8 @@ export default class IPSementara extends React.Component {
       kelas: '',
       tempatLahir: '',
       tanggalLahir: '',
+      tahun_ajar: '',
+      keterangan: '',
       ipk: '',
       data: [],
       matkul: [],
@@ -81,13 +83,26 @@ export default class IPSementara extends React.Component {
               data.push(i + 1);
               data.push(list[i].Kurikulum.matakuliah.kode_matkul);
               data.push(list[i].Kurikulum.matakuliah.nama_matkul);
-              data.push(list[i].Kurikulum.matakuliah.sks);
-              data.push(list[i].Kurikulum.matakuliah.semester);
-              data.push(list[i].grade);
-              data.push(cekBobot(list[i].grade));
-              data.push(
-                cekTotal(list[i].grade, list[i].Kurikulum.matakuliah.sks),
-              );
+              if (list[i].uas != 0) {
+                data.push(list[i].absen.toString().substring(0, 5));
+                data.push(list[i].tugas.toString().substring(0, 5));
+                data.push(list[i].uts.toString().substring(0, 5));
+                data.push(list[i].uas.toString().substring(0, 5));
+              } else if (list[i].uts == 0) {
+                data.push('-');
+                data.push('-');
+                data.push('-');
+                data.push('-');
+              } else {
+                data.push('-');
+                data.push('-');
+                data.push(list[i].uts.toString().substring(0, 5));
+                data.push('-');
+              }
+              this.setState({
+                tahun_ajar: list[i].Kurikulum.tahun_ajar.tahun_ajar,
+                keterangan: list[i].Kurikulum.tahun_ajar.keterangan,
+              });
               this.state.row.push(data);
               data = [];
             }
@@ -108,11 +123,10 @@ export default class IPSementara extends React.Component {
       'No',
       'Kode',
       'Mata Kuliah',
-      'Sks',
-      'Sms',
-      'Grade',
-      'Bobot',
-      'Jumlah',
+      'Absen',
+      'Tugas',
+      'UTS',
+      'UAS',
     ];
 
     const Informasi = ({teks1, teks2, ...rest}) => {
@@ -161,17 +175,20 @@ export default class IPSementara extends React.Component {
                   width: '90%',
                   textAlign: 'center',
                 }}>
-                INDEKS PRESTASI SEMENTARA
+                NILAI MATA KULIAH AKTIF
               </Text>
               <Informasi marginTop={15} teks1="NIM" teks2={this.state.nim} />
               <Informasi teks1="Nama Lengkap" teks2={this.state.nama} />
-              <Informasi teks1="Program Studi" teks2={this.state.jurusan} />
+              <Informasi teks1="Tahun Ajaran" teks2={this.state.tahun_ajar} />
               <Informasi
-                teks1="IP Sementara"
-                teks2={this.state.ipk}
+                teks1="Keterangan Semester"
+                teks2={this.state.keterangan}
+              />
+              <Informasi
+                teks1="Program Studi"
+                teks2={this.state.jurusan}
                 marginBottom={40}
               />
-
               <ScrollView
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}
@@ -184,9 +201,9 @@ export default class IPSementara extends React.Component {
                   <Table borderStyle={{borderWidth: 1, borderColor: 'black'}}>
                     <Row
                       data={headerKonten}
-                      flexArr={[0.2, 0.5, 2, 0.3, 0.3, 0.3, 0.3, 0.3]}
+                      flexArr={[0.2, 0.5, 1, 0.5, 0.5, 0.5, 0.5]}
                       style={{
-                        width: 700,
+                        width: 350,
                         height: 40,
                         backgroundColor: constant.warnaBackground,
                       }}
@@ -199,10 +216,10 @@ export default class IPSementara extends React.Component {
                     {this.state.row.map(item => (
                       <Row
                         data={item}
-                        flexArr={[0.2, 0.5, 2, 0.3, 0.3, 0.3, 0.3, 0.3]}
+                        flexArr={[0.2, 0.5, 1, 0.5, 0.5, 0.5, 0.5]}
                         key={item[0]}
                         style={{
-                          width: 700,
+                          width: 350,
                           height: 40,
                           backgroundColor:
                             item[0] % 2 == 0 ? 'white' : '#dfe6e9',

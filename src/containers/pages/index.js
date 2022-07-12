@@ -23,6 +23,7 @@ import UpdatePhoto from './Update/updatePhoto';
 import UpdatePassword from './Update/update-password';
 import UpdateKRS from './Update/update-krs';
 import IPSementara from './KHS/ip-sementara';
+import NilaiUts from './KHS/nilai-uts';
 
 export {
   Auth,
@@ -50,4 +51,5 @@ export {
   UpdatePassword,
   UpdateKRS,
   IPSementara,
+  NilaiUts,
 };

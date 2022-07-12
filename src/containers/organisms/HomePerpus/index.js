@@ -64,7 +64,7 @@ class HomePerpus extends Component {
         fetch(Api.host + '/v2/user/login', payload)
           .then(response => response.json())
           .then(json => {
-            let result = JSON.parse(json.data);
+            let result = json.data;
             if (json.respon_code == 200) {
               this.setState({
                 sksSelesai: result.sks_selesai,
@@ -74,6 +74,7 @@ class HomePerpus extends Component {
                 mataKuliahSelesai: result.mata_kuliah_selesai,
                 semester: result.tahun_angkatan,
               });
+              AsyncStorage.setItem('mahasiswa', JSON.stringify(result));
             }
           })
           .catch(error => {

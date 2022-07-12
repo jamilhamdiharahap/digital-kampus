@@ -28,6 +28,7 @@ import {
   UpdatePassword,
   UpdateKRS,
   IPSementara,
+  NilaiUts,
 } from './../../containers/pages';
 
 const HomeStack = createStackNavigator(
@@ -44,6 +45,7 @@ const HomeStack = createStackNavigator(
     KartuRencanaStudi,
     UpdateKRS,
     IPSementara,
+    NilaiUts,
   },
   {
     headerMode: 'none',
