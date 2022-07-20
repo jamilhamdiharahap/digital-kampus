@@ -131,6 +131,7 @@ android {
     }
 
     defaultConfig {
+        multiDexEnabled true
         missingDimensionStrategy 'react-native-camera', 'mlkit' // <--- insert this line
         applicationId "com.digitalkampus.pasim"
         minSdkVersion rootProject.ext.minSdkVersion
@@ -197,6 +198,7 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-html-to-pdf')
     implementation project(':react-native-camera')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     //noinspection GradleDynamicVersion

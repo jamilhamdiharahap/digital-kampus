@@ -1,4 +1,6 @@
 package com.digitalkampus.pasim;
+// import the package
+import com.christopherdro.htmltopdf.RNHTMLtoPDFPackage;
 
 import android.app.Application;
 import android.content.Context;

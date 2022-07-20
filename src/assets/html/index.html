@@ -1,124 +1,4 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
-import {
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  TouchableOpacity,
-  PermissionsAndroid,
-  Platform,
-} from 'react-native';
-
-import React from 'react';
-import RNHTMLtoPDF from 'react-native-html-to-pdf';
-
-import {
-  Table,
-  TableWrapper,
-  Row,
-  Rows,
-  Col,
-} from 'react-native-table-component';
-
-import Api from '../../../utils/Api';
-import IconLoading from '../../../components/atoms/IconLoading';
-import Header from '../../../components/molecules/Header';
-import {constant} from '../../../utils/constant/constant';
-
-export default class KHS extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      idMhs: '',
-      nim: '',
-      nama: '',
-      jurusan: '',
-      totalSks: '',
-      kelas: '',
-      tempatLahir: '',
-      tanggalLahir: '',
-      ipk: '',
-      data: [],
-      matkul: [],
-      matkul2: [],
-      row: [],
-      selected: false,
-    };
-    AsyncStorage.getItem('mahasiswa', (error, result) => {
-      if (result) {
-        let data = JSON.parse(result);
-        this.setState({
-          nim: data.nim,
-          idMhs: data.id_mahasiswa,
-          nama: data.nama_mhs,
-          jurusan: data.jurusan.nama_jurusan,
-          totalSks: data.total_sks,
-          kelas: data.kelas.nama_kelas,
-          tempatLahir: data.tempat_lahir,
-          tanggalLahir: data.tanggal_lahir,
-          ipk: data.ipk,
-        });
-      }
-
-      const cekBobot = a => {
-        if (a == 'A') return 4;
-        else if (a == 'B') return 3;
-        else if (a == 'C') return 2;
-        else if (a == 'D') return 1;
-        else return 0;
-      };
-
-      const cekTotal = (bobot, sks) => {
-        return cekBobot(bobot) * sks;
-      };
-
-      // const CONTENT = [
-      //   ['1', 'MM', 'APSIT', sks.tiga, '3', 'A', bobot.A, sks.tiga * bobot.A],
-      //   ['2', 'MM', 'APSIT', sks.tiga, '3', '0', bobot.E, sks.dua * bobot.E],
-      //   ['3', 'MM', 'APSIT', sks.tiga, '3', 'B', bobot.B, sks.tiga * bobot.B],
-      //   ['4', 'MM', 'APSIT', sks.tiga, '3', '0', bobot.E, sks.dua * bobot.E],
-      // ];
-
-      fetch(Api.host + '/v2/khs/' + this.state.idMhs)
-        .then(response => response.json())
-        .then(json => {
-          if (json.respon_code == 200) {
-            let list = json.data;
-            let data = [];
-            for (let i = 0; i < json.data.length; i++) {
-              data.push(i + 1);
-              data.push(list[i].Kurikulum.matakuliah.kode_matkul);
-              data.push(list[i].Kurikulum.matakuliah.nama_matkul);
-              data.push(list[i].Kurikulum.matakuliah.sks);
-              data.push(list[i].Kurikulum.matakuliah.semester);
-              data.push(list[i].grade);
-              data.push(cekBobot(list[i].grade));
-              data.push(
-                cekTotal(list[i].grade, list[i].Kurikulum.matakuliah.sks),
-              );
-              this.state.row.push(data);
-              data = [];
-            }
-            this.setState({
-              // matkul: json.data,
-              // matkul2:json.data.Kurikulum.matakuliah,
-            });
-          } else {
-            alert(json.message);
-          }
-        })
-        .catch(err => alert('Terjadi kesalahan pada server'));
-    });
-  }
-
-  render() {
-    let timeSpan = Math.floor(Date.now() / 1000);
-    let date = new Date();
-    let fullDate =
-      date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear();
-
-    let templateHtml = `<html>
+<html>
 
 <body>
     <table border="1" width="100%" cellspacing="0">
@@ -147,7 +27,7 @@ export default class KHS extends React.Component {
                     <tr>
                         <td width="20%">NOMOR</td>
                         <td>:</td>
-                        <td>1/KHS-MHS/${timeSpan}</td>
+                        <td>1/Form-Akd/${timeSpan}</td>
                     </tr>
                 </table>
             </td>
@@ -158,7 +38,7 @@ export default class KHS extends React.Component {
                     <tr>
                         <td width="20%">JUDUL</td>
                         <td>:</td>
-                        <td>KHS MAHASISWA</td>
+                        <td>KARTU HASIL STUDI MAHASISWA</td>
                     </tr>
                 </table>
             </td>
@@ -167,7 +47,7 @@ export default class KHS extends React.Component {
                     <tr>
                         <td width="20%">BERLAKU</td>
                         <td>:</td>
-                        <td>${fullDate}</td>
+                        <td>${day}</td>
                     </tr>
                 </table>
             </td>
@@ -178,9 +58,9 @@ export default class KHS extends React.Component {
         <h3>DAFTAR NILAI DAN MATA KULIAH KARTU HASIL STUDI MAHASISWA</h3>
         <h3>${this.state.nim}</h3>
         <h3>${this.state.nama.toUpperCase()}</h3>
-        <h3>PROGRAM STUDI ${this.state.jurusan.toUpperCase()}</h3>
-        <h3>KELAS ${this.state.kelas.toUpperCase()}</h3>
+        <h3>${this.state.jurusan.toUpperCase()}</h3>
     </center>
+
     <p style="margin-bottom:4">IPK : ${this.state.ipk}</p>
     <table border="1" width="100%" cellspacing="0">
         <tr align="center">
@@ -195,196 +75,20 @@ export default class KHS extends React.Component {
         </tr>
         <tr>
         </tr>
-        ${this.state.row.map(
-          item =>
-            `<tr>
-            <td align="center">${item[0]}</td>
-            <td>${item[1]}</td>
-            <td>${item[2]}</td>
-            <td align="center">${item[3]}</td>
-            <td align="center">${item[4]}</td>
-            <td align="center">${item[5]}</td>
-            <td align="center">${item[6]}</td>
-            <td align="center">${item[7]}</td>
-        </tr>`,
-        )}
+        ${this.state.row.map(item => (
+        `<tr>
+            <td align="center">${data[0]}</td>
+            <td>${data[1]}</td>
+            <td>${data[2]}</td>
+            <td align="center">${data[3]}</td>
+            <td align="center">${data[4]}</td>
+            <td align="center">${data[5]}</td>
+            <td align="center">${data[6]}</td>
+            <td align="center">${data[7]}</td>
+        </tr>`
+        ))
+        }
     </table>
-    <p><i>* hanya digunakan untuk keperluan internal Universitas Nasional PASIM</i></p>
 </body>
+
 </html>
-`;
-
-    const CreatePDF = async () => {
-      if (this.state.nim != '') {
-        alert('Sedang menbuat pdf, mohon tunggu');
-        let options = {
-          html: templateHtml,
-          fileName: 'KHS-' + this.state.nim + '-' + timeSpan,
-          directory: 'docs',
-        };
-        let file = await RNHTMLtoPDF.convert(options);
-        console.log(file.filePath);
-        alert('File tersimpan di :' + file.filePath);
-      }
-    };
-
-    const headerKonten = [
-      'No',
-      'Kode',
-      'Mata Kuliah',
-      'Sks',
-      'Sms',
-      'Grade',
-      'Bobot',
-      'Jumlah',
-    ];
-
-    const Informasi = ({teks1, teks2, ...rest}) => {
-      return (
-        <View style={{flexDirection: 'row', padding: 15, ...rest}}>
-          <View style={{flex: 1}}>
-            <Text>{teks1}</Text>
-          </View>
-          <View style={{flex: 1.5, borderBottomWidth: 1, paddingLeft: 8}}>
-            <Text>{teks2}</Text>
-          </View>
-        </View>
-      );
-    };
-
-    const sks = {
-      tiga: 3,
-      dua: 2,
-    };
-
-    const bobot = {
-      A: 4,
-      B: 3,
-      C: 2,
-      D: 1,
-      E: 0,
-    };
-
-    const CONTENT = [
-      ['1', 'MM', 'APSIT', sks.tiga, '3', 'A', bobot.A, sks.tiga * bobot.A],
-      ['2', 'MM', 'APSIT', sks.tiga, '3', '0', bobot.E, sks.dua * bobot.E],
-      ['3', 'MM', 'APSIT', sks.tiga, '3', 'B', bobot.B, sks.tiga * bobot.B],
-      ['4', 'MM', 'APSIT', sks.tiga, '3', '0', bobot.E, sks.dua * bobot.E],
-    ];
-
-    return (
-      <View style={{flex: 1, backgroundColor: '#e6e6e6', paddingBottom: 20}}>
-        <Header />
-        {this.state.row.length != 0 ? (
-          <>
-            <ScrollView style={{flex: 1, padding: 20}}>
-              <View
-                style={{
-                  width: '100%',
-                  backgroundColor: 'white',
-                  paddingVertical: 25,
-                  paddingHorizontal: 5,
-                }}>
-                <View style={{alignItems: 'center'}}>
-                  <Text
-                    style={{
-                      backgroundColor: '#e6e6e6',
-                      padding: 10,
-                      borderRadius: 5,
-                      width: '90%',
-                      textAlign: 'center',
-                    }}>
-                    KARTU HASIL STUDI
-                  </Text>
-                  <Informasi
-                    marginTop={15}
-                    teks1="NIM"
-                    teks2={this.state.nim}
-                  />
-                  <Informasi teks1="Nama Lengkap" teks2={this.state.nama} />
-                  <Informasi teks1="Program Studi" teks2={this.state.jurusan} />
-                  <Informasi teks1="SKS Tempuh" teks2={this.state.totalSks} />
-                  <Informasi
-                    teks1="Kelas"
-                    teks2={this.state.kelas}
-                    marginTop={30}
-                  />
-                  <Informasi
-                    teks1="Tempat Lahir"
-                    teks2={this.state.tempatLahir}
-                  />
-                  <Informasi
-                    teks1="Tanggal Lahir"
-                    teks2={this.state.tanggalLahir.substring(0, 10)}
-                  />
-                  <Informasi
-                    teks1="IPK"
-                    teks2={this.state.ipk.toString().substring(0, 4)}
-                    marginBottom={40}
-                  />
-                  <ScrollView
-                    horizontal={true}
-                    showsHorizontalScrollIndicator={false}
-                    style={{
-                      paddingVertical: 20,
-                      borderTopWidth: 2,
-                      borderColor: constant.warnaBackground,
-                    }}>
-                    <Table borderStyle={{borderWidth: 1, borderColor: 'black'}}>
-                      <Row
-                        data={headerKonten}
-                        flexArr={[0.2, 0.5, 2, 0.3, 0.3, 0.3, 0.3, 0.3]}
-                        style={{
-                          width: 700,
-                          height: 40,
-                          backgroundColor: constant.warnaBackground,
-                        }}
-                        textStyle={{
-                          textAlign: 'center',
-                          fontSize: 12,
-                          color: 'white',
-                        }}
-                      />
-                      {this.state.row.map(item => (
-                        <Row
-                          data={item}
-                          flexArr={[0.2, 0.5, 2, 0.3, 0.3, 0.3, 0.3, 0.3]}
-                          key={item[0]}
-                          style={{
-                            width: 700,
-                            height: 40,
-                            backgroundColor:
-                              item[0] % 2 == 0 ? 'white' : '#dfe6e9',
-                          }}
-                          textStyle={{marginLeft: 5, fontSize: 12}}
-                        />
-                      ))}
-                    </Table>
-                  </ScrollView>
-                </View>
-              </View>
-            </ScrollView>
-            <View>
-              <TouchableOpacity onPress={CreatePDF}>
-                <View
-                  style={{
-                    backgroundColor: '#041562',
-                    borderRadius: 20,
-                    width: '80%',
-                    height: 40,
-                    alignSelf: 'center',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}>
-                  <Text style={{color: 'white', fontSize: 16}}>UNDUH PDF</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-          </>
-        ) : (
-          <IconLoading />
-        )}
-      </View>
-    );
-  }
-}
