@@ -13,6 +13,7 @@ import Header from '../../../components/molecules/Header';
 import {constant} from '../../../utils/constant/constant';
 import GarisAbuTipis from '../../../components/atoms/GarisAbu/garisabutipis';
 import MainButton from '../../../components/atoms/MainButton/main-button';
+import {notifikasi} from '../../../components/molecules/LocalNotification/Notifikasi';
 
 const KartuRencanaStudi = ({navigation}) => {
   const [data, setData] = useState([]);
@@ -99,8 +100,19 @@ const KartuRencanaStudi = ({navigation}) => {
     fetch(Api.host + '/v2/krs/' + idMhs, payload)
       .then(response => response.json())
       .then(json => {
-        alert(json.message);
-        navigation.navigate('Home');
+        if (json.respon_code == 200) {
+          notifikasi.configure();
+          notifikasi.buatChannel('1');
+          notifikasi.kirimNotifikasi(
+            '1',
+            'Selamat anda telah berhasil mengisi KRS',
+            'Anda telah berhasil mengisi KRS',
+          );
+          alert(json.message);
+          navigation.navigate('Home');
+        } else {
+          alert(json.message);
+        }
       })
       .catch(error => {
         alert('Gagal mengisi KRS');

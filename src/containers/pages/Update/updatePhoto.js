@@ -8,6 +8,7 @@ import Header from './../../../components/molecules/Header';
 // Import Document Picker
 import DocumentPicker from 'react-native-document-picker';
 import {constant} from '../../../utils/constant/constant';
+import {notifikasi} from '../../../components/molecules/LocalNotification/Notifikasi';
 
 const UpdatePhoto = ({navigation}) => {
   const [singleFile, setSingleFile] = useState(null);
@@ -42,6 +43,13 @@ const UpdatePhoto = ({navigation}) => {
         .then(response => response.json())
         .then(json => {
           if (json.respon_code == 200) {
+            notifikasi.configure();
+            notifikasi.buatChannel('1');
+            notifikasi.kirimNotifikasi(
+              '1',
+              'Selamat, anda telah berhasil mengubah foto ',
+              'Anda telah berhasil mengubah foto',
+            );
             AsyncStorage.setItem('mahasiswa', JSON.stringify(json.data));
             navigation.navigate('Home');
           }

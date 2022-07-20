@@ -99,7 +99,7 @@ export default class IPSementara extends React.Component {
             alert(json.message);
           }
         })
-        .catch(err => console.log(err));
+        .catch(err => alert('Terjadi kesalahan pada server'));
     });
   }
 

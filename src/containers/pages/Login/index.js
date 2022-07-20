@@ -19,6 +19,7 @@ import Footer from './../../../components/atoms/Footer';
 import IconLoading from './../../../components/atoms/IconLoading';
 import Header from './../../../components/molecules/Header';
 import Api from '../../../utils/Api/index';
+import {notifikasi} from '../../../components/molecules/LocalNotification/Notifikasi';
 
 const warna = '#041562';
 
@@ -53,33 +54,40 @@ export default class Login extends React.Component {
         alert('Masukan Password terlebih dahulu');
       } else {
         this.setState({isLoading: true});
-        var payload ={
+        var payload = {
           method: 'POST',
           headers: {
             Accept: 'application/json',
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify({
             nim: this.state.formNim,
-            password: this.state.formPass
-          })
-        }
+            password: this.state.formPass,
+          }),
+        };
 
-        await fetch(this.url,payload)
+        await fetch(this.url, payload)
           .then(response => response.json())
           .then(json => {
             this.setState({nim: json.data.nim});
-            this.setState({nama: json.data.fullname});
+            this.setState({nama: json.data.nama_mhs});
             this.setState({password: json.data.password});
             if (this.state.password == pass) {
               AsyncStorage.setItem('mahasiswa', JSON.stringify(json.data));
+              notifikasi.configure();
+              notifikasi.buatChannel('1');
+              notifikasi.kirimNotifikasi(
+                '1',
+                'Selamat datang ' + json.data.nama_mhs,
+                'Anda berhasil login kedalam aplikasi, Nikmati segala kenyamanan di aplikasi Digital Kampus Universitas Nasional PASIM',
+              );
               this.props.navigation.navigate('Home');
             } else {
               alert('Password salah');
             }
           })
           .catch(error => {
-            alert("Mahasiswa tidak ditemukan")
+            alert('Mahasiswa tidak ditemukan');
           });
       }
     } catch (error) {
@@ -90,21 +98,27 @@ export default class Login extends React.Component {
   }
 
   render() {
-
     const lupa = () => {
-      if (this.state.formNim=="") alert('Isi NIM terlebih dahulu');
-      else{
-        alert("mohon tunggu, kami akan mengirim pesan ke email anda")
-        fetch(Api.host + '/v2/user/email/lupa/'+this.state.formNim)
-              .then(response => response.json())
-              .then(json => {
-                alert(json.message)
-              })
-              .catch(error => {
-                alert("Gagal mengirim email")
-              });
+      if (this.state.formNim == '') alert('Isi NIM terlebih dahulu');
+      else {
+        alert('mohon tunggu, kami akan mengirim pesan ke email anda');
+        fetch(Api.host + '/v2/user/email/lupa/' + this.state.formNim)
+          .then(response => response.json())
+          .then(json => {
+            notifikasi.configure();
+            notifikasi.buatChannel('1');
+            notifikasi.kirimNotifikasi(
+              '1',
+              'Email sedang dikirim ke email anda',
+              'Silahkan cek email terdaftar untuk melihat password anda',
+            );
+            alert(json.message);
+          })
+          .catch(error => {
+            alert('Gagal mengirim email');
+          });
       }
-    };    
+    };
 
     return (
       <View style={styles.main}>
@@ -154,20 +168,19 @@ export default class Login extends React.Component {
             </TouchableOpacity>
           </View>
           {this.state.isLoading ? (
-              <IconLoading/>
+            <IconLoading />
           ) : (
-          <>
-          <View style={styles.bgButtonMasuk}>
-            <TouchableOpacity
-              onPress={() => {
-                this.cekLogin(this.state.formNim, this.state.formPass);
-              }}>
-              <Text style={styles.textMasuk}>Masuk</Text>
-            </TouchableOpacity>
-          </View>
-          </>
-          )
-  }
+            <>
+              <View style={styles.bgButtonMasuk}>
+                <TouchableOpacity
+                  onPress={() => {
+                    this.cekLogin(this.state.formNim, this.state.formPass);
+                  }}>
+                  <Text style={styles.textMasuk}>Masuk</Text>
+                </TouchableOpacity>
+              </View>
+            </>
+          )}
           {/* <View style={styles.bgTextBottom}>
             <Text>Belum memiliki akun?</Text>
             <TouchableOpacity

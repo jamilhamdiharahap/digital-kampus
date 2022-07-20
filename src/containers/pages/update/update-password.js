@@ -4,6 +4,7 @@ import {View, TextInput, TouchableOpacity, Text, Image} from 'react-native';
 import normalize from 'react-native-normalize';
 import Header from '../../../components/molecules/Header';
 import Api from '../../../utils/Api';
+import {notifikasi} from '../../../components/molecules/LocalNotification/Notifikasi';
 
 const UpdatePassword = ({navigation}) => {
   let iconStyle = {
@@ -51,7 +52,16 @@ const UpdatePassword = ({navigation}) => {
         .then(response => response.json())
         .then(json => {
           alert(json.message);
-          if (json.respon_code == 200) navigation.navigate('Login');
+          if (json.respon_code == 200) {
+            notifikasi.configure();
+            notifikasi.buatChannel('1');
+            notifikasi.kirimNotifikasi(
+              '1',
+              'Selamat anda telah berhasil mengubah password',
+              'Anda telah berhasil melakukan perubahan pada password anda',
+            );
+            navigation.navigate('Login');
+          }
         })
         .catch(error => alert(error));
     }

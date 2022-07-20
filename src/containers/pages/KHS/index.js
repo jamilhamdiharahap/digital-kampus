@@ -74,28 +74,32 @@ export default class KHS extends React.Component {
       fetch(Api.host + '/v2/khs/' + this.state.idMhs)
         .then(response => response.json())
         .then(json => {
-          let list = json.data;
-          let data = [];
-          for (let i = 0; i < json.data.length; i++) {
-            data.push(i + 1);
-            data.push(list[i].Kurikulum.matakuliah.kode_matkul);
-            data.push(list[i].Kurikulum.matakuliah.nama_matkul);
-            data.push(list[i].Kurikulum.matakuliah.sks);
-            data.push(list[i].Kurikulum.matakuliah.semester);
-            data.push(list[i].grade);
-            data.push(cekBobot(list[i].grade));
-            data.push(
-              cekTotal(list[i].grade, list[i].Kurikulum.matakuliah.sks),
-            );
-            this.state.row.push(data);
-            data = [];
+          if (json.respon_code == 200) {
+            let list = json.data;
+            let data = [];
+            for (let i = 0; i < json.data.length; i++) {
+              data.push(i + 1);
+              data.push(list[i].Kurikulum.matakuliah.kode_matkul);
+              data.push(list[i].Kurikulum.matakuliah.nama_matkul);
+              data.push(list[i].Kurikulum.matakuliah.sks);
+              data.push(list[i].Kurikulum.matakuliah.semester);
+              data.push(list[i].grade);
+              data.push(cekBobot(list[i].grade));
+              data.push(
+                cekTotal(list[i].grade, list[i].Kurikulum.matakuliah.sks),
+              );
+              this.state.row.push(data);
+              data = [];
+            }
+            this.setState({
+              // matkul: json.data,
+              // matkul2:json.data.Kurikulum.matakuliah,
+            });
+          } else {
+            alert(json.message);
           }
-          this.setState({
-            // matkul: json.data,
-            // matkul2:json.data.Kurikulum.matakuliah,
-          });
         })
-        .catch(err => console.log(err));
+        .catch(err => alert('Terjadi kesalahan pada server'));
     });
   }
 
